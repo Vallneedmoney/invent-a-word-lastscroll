@@ -15,6 +15,13 @@ import { join } from 'node:path';
 const ENTRY =
   'lastscroll (n.) — the last check of your phone before bed, the one that keeps you awake for another hour.';
 
+// The gate allows 1 to 140 characters, so refuse to write anything longer:
+// a longer line would be invalid, never a better entry.
+if (ENTRY.length < 1 || ENTRY.length > 140) {
+  process.stderr.write(`lastscroll: entry is ${ENTRY.length} characters, not 1 to 140\n`);
+  process.exit(1);
+}
+
 const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 mkdirSync(out, { recursive: true });
 writeFileSync(join(out, 'entry.txt'), ENTRY, 'utf8');
